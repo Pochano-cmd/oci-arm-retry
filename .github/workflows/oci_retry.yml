@@ -33,48 +33,18 @@ jobs:
           OCI_TENANCY:     ${{ secrets.OCI_TENANCY }}
           OCI_REGION:      ${{ secrets.OCI_REGION }}
           OCI_PRIVATE_KEY: ${{ secrets.OCI_PRIVATE_KEY }}
+          OCI_PASSPHRASE:  ${{ secrets.OCI_PASSPHRASE }}
         run: |
           mkdir -p ~/.oci
-
-          # Write API private key
           printf '%s' "$OCI_PRIVATE_KEY" > ~/.oci/oci_api_key.pem
           chmod 600 ~/.oci/oci_api_key.pem
-
-          # Write config (key_file uses absolute path)
-          cat > ~/.oci/config << EOF
-          [DEFAULT]
-          user=$OCI_USER
-          fingerprint=$OCI_FINGERPRINT
-          tenancy=$OCI_TENANCY
-          region=$OCI_REGION
-          key_file=/home/runner/.oci/oci_api_key.pem
-          EOF
-
-      - name: Run OCI retry script
-        # Script succeeds (exit 0)  → next step auto-disables the workflow
-        # Timeout expires (exit 124) → treated as failure, triggers next Job
-        # timeout 19800s = 330 min, 25 min less than job timeout 355 min (buffer for setup steps)
-        id: run_script
-        continue-on-error: true
-        env:
-          PYTHONUNBUFFERED: "1"
-        run: timeout 19800 python oci_retry.py
-
-      - name: Auto-disable workflow on success
-        if: steps.run_script.outcome == 'success'
-        run: |
-          curl -s -X PUT \
-            -H "Authorization: token ${{ secrets.GH_PAT }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/workflows/oci_retry.yml/disable
-          echo "Workflow auto-disabled"
-
-      - name: Trigger next Job (seamless relay)
-        if: steps.run_script.outcome != 'success'
-        run: |
-          curl -s -X POST \
-            -H "Authorization: token ${{ secrets.GH_PAT }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/workflows/oci_retry.yml/dispatches \
-            -d '{"ref":"main"}'
-          echo "Next Job triggered"
+          {
+            echo "[DEFAULT]"
+            echo "user=$OCI_USER"
+            echo "fingerprint=$OCI_FINGERPRINT"
+            echo "tenancy=$OCI_TENANCY"
+            echo "region=$OCI_REGION"
+            echo "key_file=/home/runner/.oci/oci_api_key.pem"
+            echo "pass_phrase=$OCI_PASSPHRASE"
+          } > ~/.oci/config
+          chmod 600 ~/.oci/config
