@@ -12,9 +12,9 @@ import datetime
 
 # ─── Configuration ───────────────────────────────────────
 COMPARTMENT_ID = (
-    "ocid1.tenancy.oc1..aaaaaaaa3uez6mqr6mlgfazudygpcyhmd37w6r4k3o4bd6vjzcxphr2of4dq"  # tenancy OCID (root compartment)
+     "ocid1.tenancy.oc1..aaaaaaaaxxb3s65loyftp5o4ltom4s3ozgbmzjcjczklcmrpkgfowr52gxa"  # tenancy OCID (root compartment)
 )
-SSH_PUBLIC_KEY = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAUk4zJpqwbKxD5JDjhlLPvXHUgzG3Ydmzng2y4TBShZ kst@Dianas-MacBook-Air.local"  # Replace with your SSH public key (.pub file content)
+SSH_PUBLIC_KEY = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDE+5tpGwRWcY/TKhkqd1GyZQY3l9OvduUdpGiuz7yJ4juxM9FFvcUF4ey18bn6BA3n9MQgF52dKWTXdp4wMltraqXAAGH/wdU4dMm6QhtbKu+7gKXNc9RKyeMKqlR/zxGtSqQtUoHYlp8esEiXnaVHj7MDbZ2RnYVzccEvgc8rJQHW8a85FFq9yfH0D4AHe6TAd86zR/qLMQ07dKRSkg16/9jISPeKosb54IOOGF0T2E9ALGxJwwD3XT35UM2G0Lm9hBFMiQkHp6pUztomF53NUpH9AtdUcsJcKEFGnWqpGZGmCrYko+7AW1o1XIOOwxqzJyMtRd9bmlxpxcSsL0gJ migue@Miguel"
 INSTANCE_NAME = "trading-agent"
 ARM_OCPUS = 2
 ARM_MEMORY_IN_GBS = 12
